@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Backload Namibia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@600;700&display=swap">
+<style>
+:root{--bg:#eaf0ee;--card:#fff;--tx:#10231c;--mu:#566a62;--bd:#cbd8d3;--tl:#0f766e;--sun:#f2b705;--rd:#b42318;--ac:#10231c;--acx:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1714;--card:#16231f;--tx:#e6f0ec;--mu:#92a89f;--bd:#27382f;--tl:#2dd4bf;--rd:#f97066;--ac:#e6f0ec;--acx:#0d1714}}
+:root[data-theme="dark"]{--bg:#0d1714;--card:#16231f;--tx:#e6f0ec;--mu:#92a89f;--bd:#27382f;--tl:#2dd4bf;--rd:#f97066;--ac:#e6f0ec;--acx:#0d1714}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 15px/1.45 Barlow,system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:14px 14px 30px}
+h1{font:700 30px/1 "Barlow Condensed",Barlow,sans-serif;margin:0}
+h2{font:700 20px/1 "Barlow Condensed",Barlow,sans-serif;margin:20px 0 4px}
+.sub{color:var(--mu);margin:4px 0 0}.bar{height:6px;background:var(--sun);border-radius:3px;margin:10px 0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+nav{display:flex;gap:6px;margin:10px 0}
+nav button{flex:1;font:600 14px Barlow,sans-serif;padding:9px 4px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px}
+nav button[aria-selected="true"]{background:var(--ac);color:var(--acx);border-color:var(--ac)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--tl);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:11px 12px;margin-top:8px}
+.card.m{border-left:6px solid var(--tl)}
+.rt{font:700 19px "Barlow Condensed",Barlow,sans-serif}.meta{color:var(--mu);font-size:14px}
+.act{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.btn{font:600 14px Barlow,sans-serif;background:var(--ac);color:var(--acx);border:0;border-radius:8px;padding:9px 12px;text-decoration:none;display:inline-block;cursor:pointer}
+.btn.s{background:transparent;color:var(--tx);border:1px solid var(--bd)}.btn.d{background:transparent;color:var(--rd);border:1px solid var(--rd)}
+label{display:block;font-weight:600;margin-top:12px}
+input,select{width:100%;box-sizing:border-box;font:inherit;padding:10px;margin-top:4px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.note{color:var(--mu);font-size:13px;margin-top:16px}.empty{color:var(--mu);padding:8px 0}
+#msg{margin-top:12px;color:var(--rd);font-weight:600}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ac);color:var(--acx);padding:10px 16px;border-radius:99px;font-weight:600}
+[hidden]{display:none!important}
+</style></head><body><main>
+<div class="top"><h1>Backload Namibia</h1><button class="btn s" id="out" hidden>Sign out</button></div>
+<p class="sub">Connect empty trucks with customers who need goods moved.</p><div class="bar"></div>
+
+<section id="auth" hidden>
+<h2>Sign in or create an account</h2>
+<p class="sub">You need an account to see and post trucks and loads.</p>
+<label>Email<input id="a-e" type="email" autocomplete="email"></label>
+<label>Password (at least 6 characters)<input id="a-p" type="password" autocomplete="current-password"></label>
+<div class="act"><button class="btn" id="a-in">Sign in</button><button class="btn s" id="a-up">Create account</button></div>
+<div id="msg" role="alert"></div>
+</section>
+
+<section id="app" hidden>
+<nav role="tablist"><button role="tab" aria-selected="true" data-t="board">Board</button><button role="tab" aria-selected="false" data-t="pt">Post a truck</button><button role="tab" aria-selected="false" data-t="pl">Post a load</button></nav>
+<section id="board"><h2>Matches</h2><div id="mt"></div><h2>Empty trucks</h2><div id="tl"></div><h2>Loads wanted</h2><div id="ll"></div>
+<div class="act"><button class="btn s" id="rf">Refresh</button></div></section>
+
+<section id="pt" hidden><h2>I have an empty truck</h2>
+<label>Your name<input id="t-n" autocomplete="name"></label>
+<label>WhatsApp number<input id="t-p" type="tel" inputmode="tel" placeholder="081 234 5678"></label>
+<div class="two"><label>From<select id="t-f"></select></label><label>To<select id="t-t"></select></label></div>
+<div class="two"><label>Date<input id="t-d" type="date"></label><label>Truck size<select id="t-s"><option value="1">Small (up to 4 t)</option><option value="2" selected>Medium (5 to 10 t)</option><option value="3">Large (10 t and up)</option></select></label></div>
+<div class="act"><button class="btn" id="t-go">Post truck</button></div></section>
+
+<section id="pl" hidden><h2>I need goods moved</h2>
+<label>Your name or business<input id="l-n" autocomplete="name"></label>
+<label>WhatsApp number<input id="l-p" type="tel" inputmode="tel" placeholder="081 234 5678"></label>
+<label>What are you moving?<input id="l-w" placeholder="e.g. 6 t of building materials"></label>
+<div class="two"><label>From<select id="l-f"></select></label><label>To<select id="l-t"></select></label></div>
+<div class="two"><label>Date<input id="l-d" type="date"></label><label>Load size<select id="l-s"><option value="1">Small (up to 4 t)</option><option value="2" selected>Medium (5 to 10 t)</option><option value="3">Large (10 t and up)</option></select></label></div>
+<div class="act"><button class="btn" id="l-go">Post load</button></div></section>
+<p class="note">Backload only introduces truck owners and customers. Agree the price and details directly, and check the truck and the goods yourself. Signed-in users can see the phone numbers posted here.</p>
+</section>
+</main><div id="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+// Your project settings. The publishable key is safe to keep in a public website.
+var SUPABASE_URL="https://tlmkmdqigqsrtkjobcdi.supabase.co";
+var SUPABASE_KEY="sb_publishable__S9PGVo7zEx1Mp2sR-pRAQ_4qKnP_PF";
+
+var TW=["Windhoek","Walvis Bay","Swakopmund","Oshakati","Ondangwa","Rundu","Katima Mulilo","Otjiwarongo","Tsumeb","Grootfontein","Keetmanshoop","Mariental","Gobabis","Ariamsvlei"];
+var SZ=["","Small","Medium","Large"],sb,me=null,T=[],L=[];
+function $(id){return document.getElementById(id)}
+function iso(n){var d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function wa(p,m){p=String(p).replace(/\D/g,"");if(p.charAt(0)=="0")p="264"+p.slice(1);return"https://wa.me/"+p+"?text="+encodeURIComponent(m)}
+function dt(s){return new Date(s+"T00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}
+function toast(t){var e=$("toast");e.textContent=t;e.hidden=false;setTimeout(function(){e.hidden=true},2500)}
+function empty(m){return'<div class="empty">'+m+'</div>'}
+function rt(x){return esc(x.from_town)+" to "+esc(x.to_town)}
+function del(k,id){return me&&k.user_id==me?'<button class="btn d" data-del="'+id+'">Delete my post</button>':""}
+
+function render(){
+var m=[];L.forEach(function(l){T.forEach(function(t){if(t.from_town==l.from_town&&t.to_town==l.to_town&&t.travel_date==l.travel_date&&t.size>=l.size)m.push([l,t])})});
+$("mt").innerHTML=m.length?m.map(function(p){var l=p[0],t=p[1];return'<div class="card m"><div class="rt">'+rt(l)+' · '+dt(l.travel_date)+'</div><div class="meta">'+esc(l.what)+' ('+esc(l.name)+') fits '+esc(t.name)+"’s "+SZ[t.size].toLowerCase()+' truck</div><div class="act"><a class="btn" target="_blank" rel="noopener" href="'+wa(t.phone,"Hi "+t.name+", I found you on Backload Namibia. I have a load: "+l.what+", "+l.from_town+" to "+l.to_town+" on "+dt(l.travel_date)+". Are you available?")+'">WhatsApp truck owner</a><a class="btn s" target="_blank" rel="noopener" href="'+wa(l.phone,"Hi "+l.name+", I found you on Backload Namibia. I have a truck going "+l.from_town+" to "+l.to_town+" on "+dt(l.travel_date)+". Is your load still available?")+'">WhatsApp customer</a></div></div>'}).join(""):empty("No matches yet. A match needs the same route and date, and a truck big enough for the load.");
+$("tl").innerHTML=T.length?T.map(function(t){return'<div class="card"><div class="rt">'+rt(t)+'</div><div class="meta">'+dt(t.travel_date)+' · '+SZ[t.size]+' truck · '+esc(t.name)+'</div><div class="act"><a class="btn s" target="_blank" rel="noopener" href="'+wa(t.phone,"Hi "+t.name+", I saw your truck on Backload Namibia ("+t.from_town+" to "+t.to_town+", "+dt(t.travel_date)+").")+'">WhatsApp</a>'+del(t,"t:"+t.id)+'</div></div>'}).join(""):empty("No trucks posted yet.");
+$("ll").innerHTML=L.length?L.map(function(l){return'<div class="card"><div class="rt">'+rt(l)+'</div><div class="meta">'+esc(l.what)+' · '+dt(l.travel_date)+' · '+SZ[l.size]+' load · '+esc(l.name)+'</div><div class="act"><a class="btn s" target="_blank" rel="noopener" href="'+wa(l.phone,"Hi "+l.name+", I saw your load on Backload Namibia ("+l.from_town+" to "+l.to_town+", "+dt(l.travel_date)+").")+'">WhatsApp</a>'+del(l,"l:"+l.id)+'</div></div>'}).join(""):empty("No loads posted yet.");
+document.querySelectorAll("[data-del]").forEach(function(b){b.onclick=function(){remove(b.dataset.del)}})}
+
+async function refresh(){
+var today=iso(0);
+var a=await sb.from("trucks").select("*").gte("travel_date",today).order("travel_date");
+var b=await sb.from("loads").select("*").gte("travel_date",today).order("travel_date");
+if(a.error||b.error){toast("Could not load posts. Check your connection.");return}
+T=a.data;L=b.data;render()}
+async function remove(k){var p=k.split(":"),r=await sb.from(p[0]=="t"?"trucks":"loads").delete().eq("id",p[1]);if(r.error){toast("Could not delete");return}toast("Post deleted");refresh()}
+function v(id){return $(id).value.trim()}
+async function post(k){
+var p=k=="t"?"t-":"l-",phone=v(p+"p").replace(/\D/g,"");
+if(!v(p+"n")||phone.length<9||(k=="l"&&!v("l-w"))||!v(p+"d")){toast("Fill in all fields, with a valid phone number");return}
+if(v(p+"f")==v(p+"t")){toast("Choose two different towns");return}
+var o={name:v(p+"n"),phone:v(p+"p"),from_town:v(p+"f"),to_town:v(p+"t"),travel_date:v(p+"d"),size:+v(p+"s")};
+if(k=="l")o.what=v("l-w");
+var r=await sb.from(k=="t"?"trucks":"loads").insert(o);
+if(r.error){toast("Could not post: "+r.error.message);return}
+toast(k=="t"?"Truck posted":"Load posted");show("board");refresh()}
+function show(id){document.querySelectorAll("nav button").forEach(function(b){b.setAttribute("aria-selected",b.dataset.t==id)});["board","pt","pl"].forEach(function(s){$(s).hidden=s!=id})}
+
+async function enter(session){
+me=session?session.user.id:null;
+$("auth").hidden=!!me;$("app").hidden=!me;$("out").hidden=!me;
+if(me)refresh()}
+async function auth(up){
+var e=v("a-e"),p=$("a-p").value;$("msg").textContent="";
+if(!e||p.length<6){$("msg").textContent="Enter your email and a password of at least 6 characters.";return}
+var r=up?await sb.auth.signUp({email:e,password:p}):await sb.auth.signInWithPassword({email:e,password:p});
+if(r.error){$("msg").textContent=r.error.message;return}
+if(up&&!r.data.session){$("msg").textContent="Account created. Check your email and tap the confirmation link, then sign in.";$("msg").style.color="var(--tl)"}}
+
+function init(){
+["t-f","t-t","l-f","l-t"].forEach(function(id,i){$(id).innerHTML=TW.map(function(c){return"<option>"+c+"</option>"}).join("");$(id).selectedIndex=i%2?0:1});
+["t-d","l-d"].forEach(function(id){$(id).value=iso(1);$(id).min=iso(0)});
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){show(b.dataset.t)}});
+$("t-go").onclick=function(){post("t")};$("l-go").onclick=function(){post("l")};
+$("rf").onclick=refresh;$("a-in").onclick=function(){auth(false)};$("a-up").onclick=function(){auth(true)};
+$("out").onclick=function(){sb.auth.signOut()};
+if(!window.supabase){$("auth").hidden=false;$("msg").textContent="The app could not load. Check your internet connection.";return}
+sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+sb.auth.getSession().then(function(r){enter(r.data.session)});
+sb.auth.onAuthStateChange(function(ev,s){enter(s)})}
+init();
+</script></body></html>
