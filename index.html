@@ -129,7 +129,7 @@ $("t-go").onclick=function(){post("t")};$("l-go").onclick=function(){post("l")};
 $("rf").onclick=refresh;$("a-in").onclick=function(){auth(false)};$("a-up").onclick=function(){auth(true)};
 $("out").onclick=function(){sb.auth.signOut()};
 if(!window.supabase){$("auth").hidden=false;$("msg").textContent="The app could not load. Check your internet connection.";return}
-sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 sb.auth.getSession().then(function(r){enter(r.data.session)});
 sb.auth.onAuthStateChange(function(ev,s){enter(s)})}
 init();
