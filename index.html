@@ -91,7 +91,7 @@ function dt(s){return new Date(s+"T00:00").toLocaleDateString("en-GB",{weekday:"
 function toast(t){var e=$("toast");e.textContent=t;e.hidden=false;setTimeout(function(){e.hidden=true},2500)}
 function empty(m){return'<div class="empty">'+m+'</div>'}
 '<span class="route">'+esc(x.from_town)+' → '+esc(x.to_town)+'</span>'
-function book(id){var b=localStorage.getItem("booked")||"";localStorage.setItem("booked",b+","+id);render()}
+
 function del(k,id){return me&&k.user_id==me?'<button class="btn d" data-del="'+id+'">Delete my post</button>'+'<button class="btn s" onclick="book(\''+id+'\')">Mark Booked</button>':""}
 function render(){
 var m=[];L.forEach(function(l){T.forEach(function(t){if(t.from_town==l.from_town&&t.to_town==l.to_town&&t.travel_date==l.travel_date&&t.size>=l.size)m.push([l,t])})});
