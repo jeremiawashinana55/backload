@@ -89,7 +89,7 @@ function wa(p,m){p=String(p).replace(/\D/g,"");if(p.charAt(0)=="0")p="264"+p.sli
 function dt(s){return new Date(s+"T00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}
 function toast(t){var e=$("toast");e.textContent=t;e.hidden=false;setTimeout(function(){e.hidden=true},2500)}
 function empty(m){return'<div class="empty">'+m+'</div>'}
-function rt(x){return (x.photo?'<img src="'+x.photo+'" width="100%">':'')+
+function rt(x){return (x.photo?'<img src="'+x.photo+'" width="100%">':'')+esc(x.from_town)+" to "+esc(x.to_town)+(x.price?" · N$ "+x.price:"")}
 function del(k,id){return me&&k.user_id==me?'<button class="btn d" data-del="'+id+'">Delete my post</button>':""}
 
 function render(){
