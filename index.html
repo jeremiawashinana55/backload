@@ -111,7 +111,7 @@ async function post(k){
 var p=k=="t"?"t-":"l-",phone=v(p+"p").replace(/\D/g,"");
 if(!v(p+"n")||phone.length<9||(k=="l"&&!v("l-w"))||!v(p+"d")){toast("Fill in all fields, with a valid phone number");return}
 if(v(p+"f")==v(p+"t")){toast("Choose two different towns");return}
-,price:v(p+"price")?+v(p+"price"):null};
+,photo:v(p+"photo")||null};
 if(k=="l")o.what=v("l-w");
 var r=await sb.from(k=="t"?"trucks":"loads").insert(o);
 if(r.error){toast("Could not post: "+r.error.message);return}
