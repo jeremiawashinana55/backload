@@ -90,7 +90,7 @@ function wa(p,m){p=String(p).replace(/\D/g,"");if(p.charAt(0)=="0")p="264"+p.sli
 function dt(s){return new Date(s+"T00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}
 function toast(t){var e=$("toast");e.textContent=t;e.hidden=false;setTimeout(function(){e.hidden=true},2500)}
 function empty(m){return'<div class="empty">'+m+'</div>'}
-function rt(x){return'<span class="route">'+esc(x.from_town)+' → '+esc(x.to_town)+'</span>'} g
+function rt(x){return'<span class="route">'+esc(x.from_town)+' → '+esc(x.to_town)+'</span>'} 
 function book(id){var b=localStorage.getItem("booked")||"";localStorage.setItem("booked",b+","+id);render()}
 function del(k,id){return me&&k.user_id==me?'<button class="btn d" data-del="'+id+'">Delete my post</button>'+'<button class="btn s" onclick="book(\''+id+'\')">Mark Booked</button>':""}
 function render(){
