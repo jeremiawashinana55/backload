@@ -105,7 +105,7 @@ var today=iso(0);await sb.from("trucks").delete().lt("travel_date",today);await 
 var a=await sb.from("trucks").select("*").gte("travel_date",today).order("travel_date");
 var b=await sb.from("loads").select("*").gte("travel_date",today).order("travel_date");
 if(a.error||b.error){toast("Could not load posts. Check your connection.");return}
-T=a.data;L=b.data;render()}
+T=(a.data||[]).sort((x,y)=>y.travel_date.localeCompare(x.travel_date));L=(b.data||[]).sort((x,y)=>y.travel_date.localeCompare(x.travel_date));render()
 async function remove(k){var p=k.split(":"),r=await sb.from(p[0]=="t"?"trucks":"loads").delete().eq("id",p[1]);if(r.error){toast("Could not delete");return}toast("Post deleted");refresh()}
 function v(id){return $(id).value.trim()}
 async function post(k){
