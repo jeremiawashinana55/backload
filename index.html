@@ -101,7 +101,7 @@ $("ll").innerHTML=L.length?L.map(function(l){return'<div class="card"><div class
 document.querySelectorAll("[data-del]").forEach(function(b){b.onclick=function(){remove(b.dataset.del)}})}
 
 async function refresh(){
-var today=iso(0);
+var today=iso(0);await sb.from("trucks").delete().lt("travel_date",today);await sb.from("loads").delete().lt("travel_date",today);
 var a=await sb.from("trucks").select("*").gte("travel_date",today).order("travel_date");
 var b=await sb.from("loads").select("*").gte("travel_date",today).order("travel_date");
 if(a.error||b.error){toast("Could not load posts. Check your connection.");return}
